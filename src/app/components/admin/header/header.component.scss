@@ -1,0 +1,69 @@
+:host {
+  header {
+    background-color: var(--primary);
+    width: 100%;
+    height: 50px;
+    padding: 0 20px;
+
+    &, ul {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+
+    ul {
+      li {
+        padding: 0 15px 0 0;
+        font-size: 12px;
+        font-weight: 700;
+
+        &, a {
+          color: var(--text-menu);
+        }
+        &:last-child {
+          padding: 0;
+          button {
+            img {
+              button {
+                width: 21px;
+              }
+            }
+          }
+        }
+
+        .exit-button {
+          background-color: #6680f3;
+          border-radius: 8px;
+          border-style: none;
+          box-sizing: border-box;
+          color: #FFFFFF;
+          cursor: pointer;
+          display: inline-block;
+          font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          height: 40px;
+          line-height: 20px;
+          list-style: none;
+          margin: 0;
+          outline: none;
+          padding: 10px 16px;
+          position: relative;
+          text-align: center;
+          text-decoration: none;
+          transition: color 100ms;
+          vertical-align: baseline;
+          user-select: none;
+          -webkit-user-select: none;
+          touch-action: manipulation;
+
+          :hover,
+          :focus {
+            background-color: #F082AC;
+          }
+        }
+      }
+    }
+  }
+}
