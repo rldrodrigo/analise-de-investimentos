@@ -11,18 +11,13 @@ import { TreasuryboundService } from 'src/app/services/treasurybound.service';
 })
 export class HomeComponent implements OnInit {
 
-  tesouros: any;
-
   constructor(
-    private trasuryBoundService: TreasuryboundService
+
   ) { }
 
   ngOnInit(): void {
-    this.getData();
+
   }
 
-  getData(){
-    this.tesouros = this.trasuryBoundService.listTreasuriesBound();
-    console.log(this.tesouros);
-  }
+
 }
