@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -7,12 +7,7 @@ import { Injectable } from '@angular/core';
 export class TreasuryboundService {
 
   readonly apiTreasuryBound = 'https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json';
-
-  headers = new HttpHeaders()
-      .set('Access-Control-Allow-Origin', "*")
-      .set('Access-Control-Allow-Methods', "PUT, POST, DELETE, GET, OPTIONS")
-      .set('Access-Control-Allow-Headers', "Accept, Authorization, Content-Type");
-
+  readonly planilhaTesouroDireto = 'https://www.tesourotransparente.gov.br/ckan/dataset/f0468ecc-ae97-4287-89c2-6d8139fb4343/resource/e5f90e3a-8f8d-4895-9c56-4bb2f7877920/download/VendasTesouroDireto.csv';
 
   constructor(
     private http: HttpClient,
@@ -730,5 +725,11 @@ export class TreasuryboundService {
   }
 
     return data;
+
+    // return this.http
+    //   .get(`${this.planilhaTesouroDireto}`, {})
+    //   .toPromise()
+    //   .then((res: any) => res as any)
+    //   .catch((error: Response) => error);
   }
 }
