@@ -1,0 +1,37 @@
+<div class="tesouro">
+  <h1>{{ tesouro.nm }}</h1>
+  <table>
+    <tbody>
+      <tr>
+          <th>Rentabilidade</th>
+          <td> {{ tesouro.featrs }} </td>
+      </tr>
+      <tr>
+        <th>Descrição</th>
+        <td>{{ tesouro.invstmtStbl }}</td>
+      </tr>
+      <tr>
+        <th>Código</th>
+        <td>{{ tesouro.isinCd }}</td>
+      </tr>
+      <tr>
+        <th>Investimento Mínimo</th>
+        <td>R$ {{ tesouro.minRedVal.toFixed(2) }}</td>
+      </tr>
+      <tr>
+        <th>Indicação</th>
+        <td>{{ tesouro.rcvgIncm }}</td>
+      </tr>
+      <tr>
+        <th>Data de venda</th>
+        <td>{{ tesouro.wdwlDt.substr(0,10) }}</td>
+      </tr>
+      <tr>
+        <th>Vencimento</th>
+        <td>{{ tesouro.mtrtyDt.substr(0,10) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+

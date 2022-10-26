@@ -22,6 +22,7 @@
     "@angular/router": "~12.2.0",
     "@auth0/angular-jwt": "^5.0.2",
     "@ionic/angular": "^6.2.8",
+    "angular-material": "^1.2.5",
     "ionicons": "^6.0.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",

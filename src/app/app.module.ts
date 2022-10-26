@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { IonicModule } from '@ionic/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,9 @@ import { MatIconModule } from '@angular/material/icon';
     IonicModule.forRoot(),
     BrowserAnimationsModule,
     MatIconModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatDialogModule
   ],
   providers: [MatIconModule],
   bootstrap: [AppComponent]

@@ -1,0 +1,25 @@
+.tesouro {
+  font-size: 24px;
+  margin: 20px 40px;
+
+  h1 {
+    font-size: 35px;
+  }
+
+  table {
+    tr {
+      th {
+        font-weight: bold;
+        padding: 10px;
+      }
+      td{
+        padding: 10px;
+        line-height: 40px;
+      }
+    }
+
+    tr:nth-child(odd) {
+      background-color: #e9e9e9;
+    }
+  }
+}
