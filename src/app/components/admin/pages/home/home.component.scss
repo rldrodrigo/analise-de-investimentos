@@ -9,8 +9,10 @@
   .conteudo {
     width: calc(100% - 300px);
     margin-left: 300px;
-    height: calc(100% - 30px);
     padding: 30px;
     background-color: var(--body);
+    overflow-y: auto;
+    height: 100%;
   }
+
 }

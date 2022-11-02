@@ -23,6 +23,8 @@
     "@auth0/angular-jwt": "^5.0.2",
     "@ionic/angular": "^6.2.8",
     "angular-material": "^1.2.5",
+    "apexcharts": "^3.36.0",
+    "chart.js": "^3.9.1",
     "ionicons": "^6.0.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
