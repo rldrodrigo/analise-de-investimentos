@@ -6,13 +6,16 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TesouroComponent } from './tesouro/tesouro.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
+export interface Tesouro {
+  dataVenda: string;
+  PU: number;
+  quantidade: number;
+  tipoTitulo: string;
+  valor: number;
+  vencimento: string;
 }
 
 @Component({
@@ -20,23 +23,50 @@ export interface UserData {
   templateUrl: './tesouros.component.html',
   styleUrls: ['./tesouros.component.scss']
 })
-export class TesourosComponent implements OnInit {
+export class TesourosComponent implements OnInit, AfterViewInit  {
 
-  displayedColumns: string[] = ['cd', 'mtrtyDt', 'nm', 'rcvgIncm', 'actions'];
-  dataSource: MatTableDataSource<any>;
-  tesouros: any;
-  dataTreasury: any = [];
 
+  displayedColumns: string[] = ['Tipo Titulo', 'Vencimento do Titulo', 'Data Venda', 'PU', 'Quantidade', 'Valor', 'actions'];
+  dataSource = new MatTableDataSource<any>([]);
+  TiposDeTitulos: any = [
+    {
+      indice: 1,
+      value: "Tesouro IGPM+ com Juros Semestrais"
+    },
+    {
+      indice: 2,
+      value: "Tesouro Selic",
+    },
+    {
+      indice: 3,
+      value: "Tesouro IPCA+",
+    },
+    {
+      indice: 4,
+      value: "Tesouro IPCA+ com Juros Semestrais",
+    },
+    {
+      indice: 5,
+      value: "Tesouro Prefixado com Juros Semestrais",
+    },
+    {
+      indice: 6,
+      value: "Tesouro Prefixado",
+    },
+  ];
+
+  range = new FormGroup({
+    start: new FormControl(null),
+    end: new FormControl(null),
+  });
+
+  tesouros: any = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private trasuryBoundService: TreasuryboundService,
     private dialog: MatDialog
   ) {
-    // Assign the data to the data source for the table to render
-    this.getData();
-    this.dataSource = new MatTableDataSource(this.dataTreasury);
   }
 
   ngOnInit(): void {
@@ -44,24 +74,18 @@ export class TesourosComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  getData(tesouro: string) {
+    console.log(tesouro)
+    this.trasuryBoundService.listTreasuriesBound(tesouro).then((res) => {
+      this.tesouros = res;
+      this.dataSource = new MatTableDataSource(this.tesouros);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
-  getData(){
-    this.tesouros = this.trasuryBoundService.listTreasuriesBound();
-    this.tesouros.response.TrsrBdTradgList.map((item: any) => this.dataTreasury.push(item.TrsrBd));
-  }
-
-  teste(item: any){
+  AbrirModalTesouro(item: any){
     this.dialog.open(TesouroComponent, {
       data : {
         tesouro: item,

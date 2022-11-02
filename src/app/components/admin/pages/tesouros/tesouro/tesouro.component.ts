@@ -15,11 +15,14 @@ export class TesouroComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.tesouro = data.tesouro;
+
+    let dataNova = this.tesouro['Data Venda'].split("/")
+    let newData = new Date(dataNova[2], dataNova[1]-1, dataNova[0])
+    console.log(dataNova, newData);
    }
 
   ngOnInit(): void {
     console.log(this.tesouro)
-    console.log(this.tesouro.nm)
   }
 
 }
