@@ -12,8 +12,9 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { TesouroComponent } from './pages/tesouros/tesouro/tesouro.component';
 import { MatSelectModule } from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -31,9 +32,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    ReactiveFormsModule,
+    MatDatepickerModule
   ]
 })
 export class AdminModule { }

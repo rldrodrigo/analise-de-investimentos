@@ -15,3 +15,47 @@ td, th {
 .conteudo-principal {
   margin-bottom: 45px;
 }
+
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  input {
+    width: 200px;
+    margin: 10px;
+    padding: 5px 15px;
+    border: 1px solid #CCC;
+    text-align: center;
+    border-radius: 5px;
+  }
+}
+
+.botao-submit {
+  width: 200px;
+  padding: 10px;
+  background-color: rgb(69, 138, 78);
+  border-radius: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  margin: 0 auto;
+}
+
+.botao-submit:hover {
+  background-color: rgb(55, 110, 63);
+}
+
+
+.formulario {
+  width: 80%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grafico {
+  padding: 25px;
+  width: 600px;
+}

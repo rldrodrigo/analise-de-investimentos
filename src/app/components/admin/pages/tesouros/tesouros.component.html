@@ -1,16 +1,46 @@
 <div class="conteudo-principal">
   <h1>Vendas do Tesouro Direto</h1>
+  <button class="botao-submit" (click)="pesquisou = false" type="button" *ngIf="pesquisou">
+    Nova Consulta
+  </button>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Selecione o Tipo de Titulo</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="getData(titulo.indice)" onselect="">
-        {{titulo.value}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <form [formGroup]="tesouroForm" class="formulario" *ngIf="!pesquisou">
+      <mat-form-field appearance="fill">
+        <mat-label>Selecione o Tipo de Titulo</mat-label>
+        <mat-select formControlName="tipo">
+          <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo">
+            {{titulo.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div class="mat-elevation-z8">
+      <mat-form-field appearance="fill">
+        <mat-label>Selecione o Tituo que será comparado</mat-label>
+        <mat-select formControlName="comparativo">
+          <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo">
+            {{titulo.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="date-picker" >
+        <label> Selecione a data de venda inicial: </label>
+        <input type="date" formControlName="initialDate"  />
+      </div>
+      <div class="date-picker">
+        <label> Selecione a data de venda final: </label>
+        <input type="date" formControlName="finalDate"  />
+      </div>
+
+
+      <button class="botao-submit" (click)="submitForm()" type="button">
+        Enviar
+      </button>
+
+    </form>
+
+  <div class="mat-elevation-z8" *ngIf="pesquisou">
+    <h2>{{ tipo.value.value }}</h2>
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="Tipo Titulo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Titulo </th>
@@ -24,7 +54,7 @@
 
       <ng-container matColumnDef="Data Venda">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Data Venda </th>
-        <td mat-cell *matCellDef="let row"> {{ row['Data Venda'] }} </td>
+        <td mat-cell *matCellDef="let row"> {{ row['Data Venda'] | date : 'dd/MM/yyyy' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="PU">
@@ -53,6 +83,10 @@
     </table>
 
     <mat-paginator [pageSizeOptions]="[10, 20, 50]" [length]="tesouros.length" showFirstLastButtons></mat-paginator>
+  </div>
+
+  <div class="grafico" *ngIf="pesquisou">
+    <canvas id="canvas"> {{chart}}</canvas>
   </div>
 
 </div>
