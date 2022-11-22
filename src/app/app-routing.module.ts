@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 //Guard
 import { AuthGuard } from './core/guard/auth.guard';
+import { HomeGuard } from './core/guard/home.guard';
 
 const routes: Routes = [
   {
     path: '',
+    canActivateChild: [HomeGuard],
     loadChildren: () => import('./core/components/auth/auth.module').then(m => m.AuthModule),
   },
   {

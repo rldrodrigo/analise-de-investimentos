@@ -24,6 +24,7 @@ export class SignComponent implements OnInit {
   }
 
   public submitForm(){
+    console.log(this.formAuth.value.email, this.formAuth.value.password)
     if(this.formAuth.valid) {
       this.authService.sign({
         email: this.formAuth.value.email,

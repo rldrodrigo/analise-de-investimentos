@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -9,7 +8,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private url: string = 'http://localhost:3000';
+  private url: string = 'http://localhost:5000';
 
   constructor(
     private http: HttpClient,
@@ -17,10 +16,11 @@ export class AuthService {
   ) { }
 
   public sign(payload: {email: string, password: string}): Observable<any> {
-    return this.http.post<{token: string}>(`${this.url}/sign`, payload).pipe(
+
+    return this.http.post<{token: string}>(`${this.url}/user/login`, payload).pipe(
       map( (res: any) => {
         localStorage.removeItem('access_token');
-        localStorage.setItem('access_token', JSON.stringify(res.token));
+        localStorage.setItem('access_token', JSON.stringify(res._id));
         return this.router.navigate(['admin']);
       }),
       catchError((e: any) => {
@@ -33,16 +33,25 @@ export class AuthService {
 
   public logout() {
     localStorage.removeItem('access_token');
-    return this.router.navigate(['']);
+
+    return this.http.get(`${this.url}/user/signout`)
+      .toPromise()
+      .then((res: any) => {
+        localStorage.removeItem('access_token');
+        this.router.navigate(['']);
+        return res;
+      })
+      .catch((error: Response) => error);
   }
 
   public isAuthenticated(): boolean {
     const token = localStorage.getItem("access_token");
 
-    if(!token) return false;
+    if(token) {
+      return true;
+    }
 
-    const jwtHelper = new JwtHelperService();
-    return !jwtHelper.isTokenExpired(token);
+    return false;
   }
 
 }

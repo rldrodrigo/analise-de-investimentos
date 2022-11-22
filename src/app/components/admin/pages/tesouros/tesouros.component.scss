@@ -55,7 +55,13 @@ td, th {
   align-items: center;
 }
 
+.graficos {
+  display: flex;
+  flex-direction: row;
+}
+
 .grafico {
   padding: 25px;
   width: 600px;
 }
+

@@ -1,6 +1,6 @@
 <div class="conteudo-principal">
   <h1>Vendas do Tesouro Direto</h1>
-  <button class="botao-submit" (click)="pesquisou = false" type="button" *ngIf="pesquisou">
+  <button class="botao-submit" (click)="novaConsulta()" type="button" *ngIf="pesquisou">
     Nova Consulta
   </button>
 
@@ -8,17 +8,38 @@
       <mat-form-field appearance="fill">
         <mat-label>Selecione o Tipo de Titulo</mat-label>
         <mat-select formControlName="tipo">
-          <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo">
+          <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="selecionaPapel(titulo)">
             {{titulo.value}}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field appearance="fill" >
+        <mat-label>Selecione a Data de vencimento </mat-label>
+        <mat-select formControlName="dataVencimento">
+          <mat-option value=""> Todos </mat-option>
+          <mat-option *ngFor="let data of listaDataVencimento" [value]="data">
+            {{data}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <mat-form-field appearance="fill">
-        <mat-label>Selecione o Tituo que será comparado</mat-label>
+        <mat-label>Selecione o Titulo que será comparado</mat-label>
         <mat-select formControlName="comparativo">
-          <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo">
+          <mat-option value=""> Nenhum </mat-option>
+          <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="selecionaPapelComparativo(titulo)">
             {{titulo.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="selecionouComparativo" >
+        <mat-label>Selecione a Data de vencimento do titulo que será comparado</mat-label>
+        <mat-select formControlName="dataComparativo">
+          <mat-option value=""> Todos </mat-option>
+          <mat-option *ngFor="let data of listaDataVencimentoComparativo" [value]="data">
+            {{data}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -29,14 +50,13 @@
       </div>
       <div class="date-picker">
         <label> Selecione a data de venda final: </label>
-        <input type="date" formControlName="finalDate"  />
+        <input type="date" formControlName="finalDate" />
       </div>
 
 
       <button class="botao-submit" (click)="submitForm()" type="button">
         Enviar
       </button>
-
     </form>
 
   <div class="mat-elevation-z8" *ngIf="pesquisou">
@@ -85,8 +105,14 @@
     <mat-paginator [pageSizeOptions]="[10, 20, 50]" [length]="tesouros.length" showFirstLastButtons></mat-paginator>
   </div>
 
-  <div class="grafico" *ngIf="pesquisou">
-    <canvas id="canvas"> {{chart}}</canvas>
+  <div class="graficos">
+      <div class="grafico" *ngIf="pesquisou">
+        <canvas id="canvas"> {{chart}}</canvas>
+      </div>
+
+      <div class="grafico" *ngIf="pesquisou">
+        <canvas id="precoTaxa"> {{chart2}}</canvas>
+      </div>
   </div>
 
 </div>
