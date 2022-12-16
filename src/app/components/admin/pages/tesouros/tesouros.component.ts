@@ -60,7 +60,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   listaDataVencimento: any  = [];
   listaDataVencimentoComparativo: any = [];
 
-  graphicLabels: any = [];
+  graphicLabels: string[] = [];
+  graphicLabelsComparativo: string[] = [];
 
   graphicData: any = [];
   graphicComparativoData: any = [];
@@ -162,6 +163,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.graphicComparativoData = [];
       this.tesourosComparativo.map((item: any) => {
         this.graphicComparativoData.push(item['PU']);
+        this.graphicLabelsComparativo.push(`${item['Data Venda'].getDate()}/${item['Data Venda'].getMonth()+1}/${item['Data Venda'].getFullYear()}`);
       });
       this.getData(this.tipo.value.indice, this.dataVencimento.value);
       this.pesquisou = true;
@@ -197,7 +199,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.graphicTaxas = [];
       this.graphicTaxasLabels = [];
       dados.map((item: any) => {
-        this.graphicTaxas.push(item['PU Base Manha']);
+        this.graphicTaxas.push(item['Taxa Compra Manha']);
         this.graphicTaxasLabels.push(`${item['Data Base'].getDate()}/${item['Data Base'].getMonth()+1}/${item['Data Base'].getFullYear()}`);
       });
 
@@ -262,7 +264,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: "Gráfico de preço unitário ".concat(this.tipo.value.value.concat(' ').concat(this.dataVencimento.value.slice(this.dataVencimento.value.length - 4))),
             data: this.graphicData,
-            borderColor: '',
+            borderColor: '#FF336B',
             fill: false,
           }]
         }
