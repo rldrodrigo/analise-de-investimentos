@@ -24,13 +24,16 @@ export class SignComponent implements OnInit {
   }
 
   public submitForm(){
-    console.log(this.formAuth.value.email, this.formAuth.value.password)
     if(this.formAuth.valid) {
       this.authService.sign({
         email: this.formAuth.value.email,
         password: this.formAuth.value.password
       }).subscribe({
-        next: (res) => res,
+        next: (res) => {
+          if(res.status === 301) {
+            this.msgError == res.error;
+          }
+        },
         error: (e) => (this.msgError = e),
       })
     }

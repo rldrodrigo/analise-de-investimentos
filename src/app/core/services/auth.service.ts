@@ -24,7 +24,9 @@ export class AuthService {
         return this.router.navigate(['admin']);
       }),
       catchError((e: any) => {
-        if(e.error.message) return throwError(e.error.message);
+        if(e.error) {
+          return throwError(e.error.error);
+        }
 
         return throwError("Servidor não está respondendo.");
       })

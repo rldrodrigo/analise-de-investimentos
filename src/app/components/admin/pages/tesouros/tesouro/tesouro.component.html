@@ -1,14 +1,14 @@
 <div class="tesouro">
-  <h1>	<mat-icon>account_balance</mat-icon> {{ tesouro['Tipo Titulo'] }}</h1>
+  <h1>	<mat-icon>account_balance</mat-icon> {{ tesouro['tipo_titulo'] }}</h1>
   <table>
     <tbody>
       <tr>
         <th>Vencimento do Titulo</th>
-        <td>{{ tesouro['Vencimento do Titulo'] }}</td>
+        <td>{{ tesouro['ano_vencimento'] }}</td>
       </tr>
       <tr>
         <th>Data Venda</th>
-        <td>{{ tesouro['Data Venda'] | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ tesouro['data_venda']['$date'] | date : 'dd/MM/yyyy' : '+00:00' }}</td>
       </tr>
       <tr>
         <th>PU</th>
@@ -16,11 +16,11 @@
       </tr>
       <tr>
         <th>Quantidade</th>
-        <td>{{ tesouro['Quantidade'] }}</td>
+        <td>{{ tesouro['quantidade'] }}</td>
       </tr>
       <tr>
         <th>Valor</th>
-        <td>R$ {{ tesouro['Valor'] }}</td>
+        <td>R$ {{ tesouro['valor'] }}</td>
       </tr>
 
     </tbody>
