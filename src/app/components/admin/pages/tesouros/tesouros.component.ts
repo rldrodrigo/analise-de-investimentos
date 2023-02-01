@@ -105,9 +105,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.graphicData = [];
       this.graphicLabels = [];
       this.tesouros.map((item: any) => {
-        this.graphicData.push(item['PU']);
         let nova_data = new Date(item['data_venda']['$date'])
-        this.graphicLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+        let newItem = {
+          x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+          y: item['PU'],
+        };
+        this.graphicData.push(newItem);
       });
       this.criaGrafico();
     });
@@ -125,9 +128,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
       this.graphicComparativoData = [];
       this.tesourosComparativo.map((item: any) => {
-        this.graphicComparativoData.push(item['PU']);
         let nova_data = new Date(item['data_venda']['$date'])
-        this.graphicLabelsComparativo.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+        let newItem = {
+          x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+          y: item['PU'],
+        };
+        this.graphicComparativoData.push(newItem);
       });
       this.getData(this.tipo.value, this.dataVencimento.value);
       this.pesquisou = true;
@@ -141,9 +147,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
         this.graphicTaxasComparativo = [];
         dados.map((item: any) => {
-          this.graphicTaxasComparativo.push(item['taxa_compra_manha']);
-          // let nova_data = new Date(item['data_base']['$date'])
-          // this.graphicTaxasLabels.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          let nova_data = new Date(item['data_base']['$date'])
+          let newItem = {
+            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            y: item['taxa_compra_manha'],
+          };
+          this.graphicTaxasComparativo.push(newItem);
         });
       })
       this.trasuryBoundService.listarTesourosTaxa(this.tipo.value, this.dataVencimento.value, this.initialDate.value, this.finalDate.value).then((res) => {
@@ -152,9 +161,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         this.graphicTaxas = [];
         this.graphicTaxasLabels = [];
         dados.map((item: any) => {
-          this.graphicTaxas.push(item['taxa_compra_manha']);
           let nova_data = new Date(item['data_base']['$date'])
-          this.graphicTaxasLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          let newItem = {
+            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            y: item['taxa_compra_manha'],
+          };
+          this.graphicTaxas.push(newItem);
         });
 
         this.criaGraficoTaxa();
@@ -166,9 +178,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         this.graphicTaxas = [];
         this.graphicTaxasLabels = [];
         dados.map((item: any) => {
-          this.graphicTaxas.push(item['taxa_compra_manha']);
           let nova_data = new Date(item['data_base']['$date'])
-          this.graphicTaxasLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          let newItem = {
+            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            y: item['taxa_compra_manha'],
+          };
+          this.graphicTaxas.push(newItem);
         });
 
         this.criaGraficoTaxa();
@@ -182,16 +197,24 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         let dados = res;
         this.graficoQuantidadeComparativo = [];
         dados.map((item: any) => {
-          this.graficoQuantidadeComparativo.push(item['quantidade']);
+          let nova_data = new Date(item['data_venda']['$date'])
+          let newItem = {
+            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            y: item['quantidade'],
+          };
+          this.graficoQuantidadeComparativo.push(newItem);
         });
         this.trasuryBoundService.listTreasuriesBound(this.tipo.value, this.dataVencimento.value, this.initialDate.value, this.finalDate.value).then((res) => {
           let dados = res;
           this.graficoQuantidade = [];
           this.graficoQuantidadeLabels = [];
           dados.map((item: any) => {
-            this.graficoQuantidade.push(item['quantidade']);
             let nova_data = new Date(item['data_venda']['$date'])
-            this.graficoQuantidadeLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+            let newItem = {
+              x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+              y: item['quantidade'],
+            };
+            this.graficoQuantidade.push(newItem);
           });
           this.criarGraficoQuantidade();
         });
@@ -203,9 +226,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         this.graficoQuantidade = [];
         this.graficoQuantidadeLabels = [];
         dados.map((item: any) => {
-          this.graficoQuantidade.push(item['quantidade']);
           let nova_data = new Date(item['data_venda']['$date'])
-          this.graficoQuantidadeLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          let newItem = {
+            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            y: item['quantidade'],
+          };
+          this.graficoQuantidade.push(newItem);
         });
         this.criarGraficoQuantidade();
       });
@@ -235,15 +261,14 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.chart = new Chart('canvas', {
         type : 'line',
         data: {
-          labels: this.graphicLabels,
           datasets: [{
-            label: this.tipo.value.concat(' ').concat(this.dataVencimento.value),
+            label: "Gráfico de preço unitário ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
             data: this.graphicData,
             borderColor: '#FF336B',
             fill: false,
           },
           {
-            label: this.comparativo.value.concat(' ').concat(this.dataComparativo.value),
+            label: "Gráfico de preço unitário ".concat(this.comparativo.value.concat(' ').concat(this.dataComparativo.value)),
             data: this.graphicComparativoData,
             borderColor: 'blue',
             fill: false,
@@ -256,7 +281,6 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.chart = new Chart('canvas', {
         type : 'line',
         data: {
-          labels: this.graphicLabels,
           datasets: [{
             label: "Gráfico de preço unitário ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
             data: this.graphicData,
@@ -270,10 +294,11 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
   criaGraficoTaxa(){
     if(this.comparativo.value) {
+      console.log(this.graphicTaxasComparativo);
+      console.log(this.graphicTaxas);
       this.chart2 = new Chart('precoTaxa', {
         type : 'line',
         data: {
-          labels: this.graphicTaxasLabels,
           datasets: [{
             label: "Gráfico de taxa ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
             data: this.graphicTaxas,
@@ -291,7 +316,6 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.chart2 = new Chart('precoTaxa', {
         type : 'line',
         data: {
-          labels: this.graphicTaxasLabels,
           datasets: [{
             label: "Gráfico de taxa ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
             data: this.graphicTaxas,
@@ -308,7 +332,6 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.chart3 = new Chart('quantidadeVendas', {
         type : 'bar',
         data: {
-          labels: this.graficoQuantidadeLabels,
           datasets: [{
             label: "Gráfico de quantidade de vendas ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
             data: this.graficoQuantidade,
@@ -324,7 +347,6 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.chart3 = new Chart('quantidadeVendas', {
         type : 'bar',
         data: {
-          labels: this.graficoQuantidadeLabels,
           datasets: [{
             label: "Gráfico de quantidade de vendas ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
             data: this.graficoQuantidade,
