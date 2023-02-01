@@ -261,20 +261,33 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.chart = new Chart('canvas', {
         type : 'line',
         data: {
-          datasets: [{
-            label: "Gráfico de preço unitário ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
-            data: this.graphicData,
-            borderColor: '#FF336B',
-            fill: false,
-          },
-          {
-            label: "Gráfico de preço unitário ".concat(this.comparativo.value.concat(' ').concat(this.dataComparativo.value)),
-            data: this.graphicComparativoData,
-            borderColor: 'blue',
-            fill: false,
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: this.graphicData,
+              borderColor: '#FF336B',
+              fill: false,
+            },
+            {
+              label: `${this.comparativo.value} ${this.dataComparativo.value}`,
+              data: this.graphicComparativoData,
+              borderColor: 'blue',
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Preço Unitário',
+            }
           }
-        ]
-        }
+        },
       });
 
     } else {
@@ -282,12 +295,24 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         type : 'line',
         data: {
           datasets: [{
-            label: "Gráfico de preço unitário ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicData,
             borderColor: '#FF336B',
             fill: false,
           }]
-        }
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Preço Unitário'
+            }
+          }
+        },
       });
     }
   }
@@ -300,29 +325,53 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         type : 'line',
         data: {
           datasets: [{
-            label: "Gráfico de taxa ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicTaxas,
             borderColor: '#33D1FF',
             fill: false,
           }, {
-            label: "Gráfico de taxa ".concat(this.comparativo.value.concat(' ').concat(this.dataComparativo.value)),
+            label: `${this.comparativo.value} ${this.dataComparativo.value}`,
             data: this.graphicTaxasComparativo,
             borderColor: '#D1F',
             fill: false,
           }]
-        }
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Valor da Taxa'
+            }
+          }
+        },
       });
     } else {
       this.chart2 = new Chart('precoTaxa', {
         type : 'line',
         data: {
           datasets: [{
-            label: "Gráfico de taxa ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicTaxas,
             borderColor: '#33D1FF',
             fill: false,
           }]
-        }
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Valor da Taxa'
+            }
+          }
+        },
       });
     }
   }
@@ -333,26 +382,50 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         type : 'bar',
         data: {
           datasets: [{
-            label: "Gráfico de quantidade de vendas ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graficoQuantidade,
             backgroundColor: "#8c6bef"
           }, {
-            label: "Gráfico de quantidade de vendas ".concat(this.comparativo.value.concat(' ').concat(this.dataComparativo.value)),
+            label: `${this.comparativo.value} ${this.dataComparativo.value}`,
             data: this.graficoQuantidadeComparativo,
             backgroundColor: "#f00a5e"
           }]
-        }
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Quantidade de Vendas'
+            }
+          }
+        },
       });
     } else {
       this.chart3 = new Chart('quantidadeVendas', {
         type : 'bar',
         data: {
           datasets: [{
-            label: "Gráfico de quantidade de vendas ".concat(this.tipo.value.concat(' ').concat(this.dataVencimento.value)),
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graficoQuantidade,
             backgroundColor: "#8c6bef"
           }]
-        }
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Quantidade de Vendas'
+            }
+          }
+        },
       });
     }
   }
