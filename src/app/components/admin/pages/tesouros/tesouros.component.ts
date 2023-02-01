@@ -107,7 +107,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.tesouros.map((item: any) => {
         this.graphicData.push(item['PU']);
         let nova_data = new Date(item['data_venda']['$date'])
-        this.graphicLabels.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+        this.graphicLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
       });
       this.criaGrafico();
     });
@@ -127,7 +127,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.tesourosComparativo.map((item: any) => {
         this.graphicComparativoData.push(item['PU']);
         let nova_data = new Date(item['data_venda']['$date'])
-        this.graphicLabelsComparativo.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+        this.graphicLabelsComparativo.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
       });
       this.getData(this.tipo.value, this.dataVencimento.value);
       this.pesquisou = true;
@@ -154,7 +154,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           this.graphicTaxas.push(item['taxa_compra_manha']);
           let nova_data = new Date(item['data_base']['$date'])
-          this.graphicTaxasLabels.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          this.graphicTaxasLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
         });
 
         this.criaGraficoTaxa();
@@ -168,7 +168,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           this.graphicTaxas.push(item['taxa_compra_manha']);
           let nova_data = new Date(item['data_base']['$date'])
-          this.graphicTaxasLabels.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          this.graphicTaxasLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
         });
 
         this.criaGraficoTaxa();
@@ -191,7 +191,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           dados.map((item: any) => {
             this.graficoQuantidade.push(item['quantidade']);
             let nova_data = new Date(item['data_venda']['$date'])
-            this.graficoQuantidadeLabels.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+            this.graficoQuantidadeLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
           });
           this.criarGraficoQuantidade();
         });
@@ -205,7 +205,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           this.graficoQuantidade.push(item['quantidade']);
           let nova_data = new Date(item['data_venda']['$date'])
-          this.graficoQuantidadeLabels.push(nova_data.getDate() + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
+          this.graficoQuantidadeLabels.push((nova_data.getDate() + 1) + "/" + ((nova_data.getMonth() + 1)) + "/" + nova_data.getFullYear());
         });
         this.criarGraficoQuantidade();
       });
