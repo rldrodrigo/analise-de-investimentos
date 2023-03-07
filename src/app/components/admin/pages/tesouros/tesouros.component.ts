@@ -464,6 +464,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   novaConsulta() {
     this.pesquisou = false;
     this.comparativo.setValue(undefined);
+    this.dataComparativo.setValue(undefined);
   }
 
   get initialDate() {
