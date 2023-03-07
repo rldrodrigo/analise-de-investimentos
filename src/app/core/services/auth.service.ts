@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  //private url: string = 'http://localhost:5000';
-  private url: string = 'ec2-15-228-220-15.sa-east-1.compute.amazonaws.com:5000';
+  private url: string = environment.api;
 
 
   constructor(

@@ -6,10 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TreasuryboundService {
-
-  // readonly urlApi = 'http://127.0.0.1:5000';
-  readonly urlApi = 'ec2-15-228-220-15.sa-east-1.compute.amazonaws.com:5000';
-
+  readonly urlApi = environment.api;
 
   constructor(
     private http: HttpClient,
