@@ -11,7 +11,6 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private url: string = environment.api;
 
-
   constructor(
     private http: HttpClient,
     private router: Router
@@ -19,12 +18,7 @@ export class AuthService {
 
   public sign(payload: {email: string, password: string}): Observable<any> {
 
-    let headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .set('Access-Control-Allow-Origin', environment.api);
-
-
-    return this.http.post<{token: string}>(`${this.url}/user/login`, {...headers, ...payload}).pipe(
+    return this.http.post<{token: string}>(`${this.url}/user/login`, payload).pipe(
       map( (res: any) => {
         localStorage.removeItem('access_token');
         localStorage.setItem('access_token', JSON.stringify(res._id));
