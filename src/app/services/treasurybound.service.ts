@@ -24,7 +24,7 @@ export class TreasuryboundService {
     data_final = nova_data_final[2] + "-" +nova_data_final[1] + "-" + nova_data_final[0];
 
     return this.http
-      .post(`${this.urlApi}/getTesouro`, {
+      .post(`${this.urlApi}/tesouro/getTesouro`, {
           tipo_titulo,
           ano_vencimento,
           data_inicial,
@@ -46,7 +46,7 @@ export class TreasuryboundService {
     data_final = nova_data_final[2] + "-" +nova_data_final[1] + "-" + nova_data_final[0];
 
     return this.http
-      .post(`${this.urlApi}/getPrecoTaxa`, {
+      .post(`${this.urlApi}/tesouro/getPrecoTaxa`, {
           tipo_titulo,
           ano_vencimento,
           data_inicial,
@@ -63,7 +63,7 @@ export class TreasuryboundService {
       .set('Access-Control-Allow-Origin', environment.host);
 
     return this.http
-      .post(`${this.urlApi}/getAnoVencimento`, {
+      .post(`${this.urlApi}/tesouro/getAnoVencimento`, {
           tipo_titulo,
         }
         )

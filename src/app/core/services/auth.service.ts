@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
@@ -19,7 +19,12 @@ export class AuthService {
 
   public sign(payload: {email: string, password: string}): Observable<any> {
 
-    return this.http.post<{token: string}>(`${this.url}/user/login`, payload).pipe(
+    let headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Access-Control-Allow-Origin', environment.api);
+
+
+    return this.http.post<{token: string}>(`${this.url}/user/login`, {...headers, ...payload}).pipe(
       map( (res: any) => {
         localStorage.removeItem('access_token');
         localStorage.setItem('access_token', JSON.stringify(res._id));
