@@ -8,7 +8,9 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private url: string = 'http://localhost:5000';
+  //private url: string = 'http://localhost:5000';
+  private url: string = 'ec2-15-228-220-15.sa-east-1.compute.amazonaws.com:5000';
+
 
   constructor(
     private http: HttpClient,
