@@ -107,7 +107,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.tesouros.map((item: any) => {
         let nova_data = new Date(item['data_venda']['$date'])
         let newItem = {
-          x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+          x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
           y: item['PU'],
         };
         this.graphicData.push(newItem);
@@ -130,7 +130,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.tesourosComparativo.map((item: any) => {
         let nova_data = new Date(item['data_venda']['$date'])
         let newItem = {
-          x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+          x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
           y: item['PU'],
         };
         this.graphicComparativoData.push(newItem);
@@ -149,7 +149,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           let nova_data = new Date(item['data_base']['$date'])
           let newItem = {
-            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
             y: item['taxa_compra_manha'],
           };
           this.graphicTaxasComparativo.push(newItem);
@@ -163,7 +163,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           let nova_data = new Date(item['data_base']['$date'])
           let newItem = {
-            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
             y: item['taxa_compra_manha'],
           };
           this.graphicTaxas.push(newItem);
@@ -180,7 +180,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           let nova_data = new Date(item['data_base']['$date'])
           let newItem = {
-            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
             y: item['taxa_compra_manha'],
           };
           this.graphicTaxas.push(newItem);
@@ -199,7 +199,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           let nova_data = new Date(item['data_venda']['$date'])
           let newItem = {
-            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
             y: item['quantidade'],
           };
           this.graficoQuantidadeComparativo.push(newItem);
@@ -211,7 +211,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           dados.map((item: any) => {
             let nova_data = new Date(item['data_venda']['$date'])
             let newItem = {
-              x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+              x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
               y: item['quantidade'],
             };
             this.graficoQuantidade.push(newItem);
@@ -228,7 +228,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         dados.map((item: any) => {
           let nova_data = new Date(item['data_venda']['$date'])
           let newItem = {
-            x: `${nova_data.getDate() + 1}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
             y: item['quantidade'],
           };
           this.graficoQuantidade.push(newItem);
