@@ -95,19 +95,26 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.tesouros = res;
 
       let initialDate = this.initialDate.value.split("-");
+      console.log(initialDate)
       initialDate = new Date(initialDate[0], initialDate[1]-1, initialDate[2]);
-
+      console.log(initialDate)
       let finalDate =  this.finalDate.value.split("-");
+      console.log(finalDate)
       finalDate = new Date(finalDate[0], finalDate[1]-1, finalDate[2]);
+      console.log(finalDate)
 
       this.dataSource = new MatTableDataSource(this.tesouros);
       this.dataSource.paginator = this.paginator;
       this.graphicData = [];
       this.graphicLabels = [];
       this.tesouros.map((item: any) => {
-        let nova_data = new Date(item['data_venda']['$date'])
+        console.log(item['data_venda']['$date'].substring(0, 10));
+        // let nova_data = new Date(item['data_venda']['$date'].substring(0, 10))
+        //console.log(nova_data.toLocaleString('pt-BR', { timeZone: 'UTC' }));
+        //console.log(nova_data.toISOString());
+        //console.log(`${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`)
         let newItem = {
-          x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['PU'],
         };
         this.graphicData.push(newItem);
@@ -128,9 +135,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
       this.graphicComparativoData = [];
       this.tesourosComparativo.map((item: any) => {
-        let nova_data = new Date(item['data_venda']['$date'])
+        // let nova_data = new Date(item['data_venda']['$date'])
         let newItem = {
-          x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['PU'],
         };
         this.graphicComparativoData.push(newItem);
@@ -147,9 +154,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
         this.graphicTaxasComparativo = [];
         dados.map((item: any) => {
-          let nova_data = new Date(item['data_base']['$date'])
+          // let nova_data = new Date(item['data_base']['$date'])
           let newItem = {
-            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
             y: item['taxa_compra_manha'],
           };
           this.graphicTaxasComparativo.push(newItem);
@@ -161,9 +168,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         this.graphicTaxas = [];
         this.graphicTaxasLabels = [];
         dados.map((item: any) => {
-          let nova_data = new Date(item['data_base']['$date'])
+          // let nova_data = new Date(item['data_base']['$date'])
           let newItem = {
-            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
             y: item['taxa_compra_manha'],
           };
           this.graphicTaxas.push(newItem);
@@ -178,9 +185,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         this.graphicTaxas = [];
         this.graphicTaxasLabels = [];
         dados.map((item: any) => {
-          let nova_data = new Date(item['data_base']['$date'])
+          // let nova_data = new Date(item['data_base']['$date'])
           let newItem = {
-            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
             y: item['taxa_compra_manha'],
           };
           this.graphicTaxas.push(newItem);
@@ -197,9 +204,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         let dados = res;
         this.graficoQuantidadeComparativo = [];
         dados.map((item: any) => {
-          let nova_data = new Date(item['data_venda']['$date'])
+          // let nova_data = new Date(item['data_venda']['$date'])
           let newItem = {
-            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
             y: item['quantidade'],
           };
           this.graficoQuantidadeComparativo.push(newItem);
@@ -209,9 +216,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           this.graficoQuantidade = [];
           this.graficoQuantidadeLabels = [];
           dados.map((item: any) => {
-            let nova_data = new Date(item['data_venda']['$date'])
+            // let nova_data = new Date(item['data_venda']['$date'])
             let newItem = {
-              x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+              x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
               y: item['quantidade'],
             };
             this.graficoQuantidade.push(newItem);
@@ -226,9 +233,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         this.graficoQuantidade = [];
         this.graficoQuantidadeLabels = [];
         dados.map((item: any) => {
-          let nova_data = new Date(item['data_venda']['$date'])
+          // let nova_data = new Date(item['data_venda']['$date'])
           let newItem = {
-            x: `${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`,
+            x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
             y: item['quantidade'],
           };
           this.graficoQuantidade.push(newItem);
