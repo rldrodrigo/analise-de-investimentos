@@ -57,6 +57,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   graficoQuantidadeComparativo: any = [];
 
   graphicTaxaRetorno: any = [];
+  graphicTaxaRetornoComparativo: any = [];
 
   tesouros: any = [];
   tesourosComparativo: any = [];
@@ -97,13 +98,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.tesouros = res;
 
       let initialDate = this.initialDate.value.split("-");
-      console.log(initialDate)
       initialDate = new Date(initialDate[0], initialDate[1]-1, initialDate[2]);
-      console.log(initialDate)
       let finalDate =  this.finalDate.value.split("-");
-      console.log(finalDate)
       finalDate = new Date(finalDate[0], finalDate[1]-1, finalDate[2]);
-      console.log(finalDate)
 
       this.dataSource = new MatTableDataSource(this.tesouros);
       this.dataSource.paginator = this.paginator;
@@ -137,13 +134,20 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       finalDate = new Date(finalDate[0], finalDate[1]-1, finalDate[2]);
 
       this.graphicComparativoData = [];
+      this.graphicTaxaRetornoComparativo = [];
+
       this.tesourosComparativo.map((item: any) => {
         // let nova_data = new Date(item['data_venda']['$date'])
         let newItem = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['PU'],
         };
+        let TaxaRetorno = {
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['taxa_retorno_logaritmica'],
+        }
         this.graphicComparativoData.push(newItem);
+        this.graphicTaxaRetornoComparativo.push(TaxaRetorno);
       });
       this.getData(this.tipo.value, this.dataVencimento.value);
       this.pesquisou = true;
@@ -253,6 +257,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       data : {
         tesouro: item,
         graphicTaxaRetorno: this.graphicTaxaRetorno,
+        comparativo: this.comparativo.value,
+        comparativoData: this.dataComparativo.value,
+        graphicTaxaRetornoComparativo: this.graphicTaxaRetornoComparativo,
       },
       maxWidth: '80%',
       minWidth: '30%',
