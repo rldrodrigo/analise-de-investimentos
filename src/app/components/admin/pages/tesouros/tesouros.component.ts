@@ -56,6 +56,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   graficoQuantidade: any = []
   graficoQuantidadeComparativo: any = [];
 
+  graphicTaxaRetorno: any = [];
+
   tesouros: any = [];
   tesourosComparativo: any = [];
   pesquisou: boolean = false;
@@ -106,18 +108,19 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.dataSource = new MatTableDataSource(this.tesouros);
       this.dataSource.paginator = this.paginator;
       this.graphicData = [];
+      this.graphicTaxaRetorno = [];
       this.graphicLabels = [];
       this.tesouros.map((item: any) => {
-        console.log(item['data_venda']['$date'].substring(0, 10));
-        // let nova_data = new Date(item['data_venda']['$date'].substring(0, 10))
-        //console.log(nova_data.toLocaleString('pt-BR', { timeZone: 'UTC' }));
-        //console.log(nova_data.toISOString());
-        //console.log(`${nova_data.getDate()}/${nova_data.getMonth() + 1}/${nova_data.getFullYear()}`)
         let newItem = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['PU'],
         };
+        let TaxaRetorno = {
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['taxa_retorno_logaritmica'],
+        }
         this.graphicData.push(newItem);
+        this.graphicTaxaRetorno.push(TaxaRetorno);
       });
       this.criaGrafico();
     });
@@ -249,6 +252,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
     this.dialog.open(TesouroComponent, {
       data : {
         tesouro: item,
+        graphicTaxaRetorno: this.graphicTaxaRetorno,
       },
       maxWidth: '80%',
       minWidth: '30%',
@@ -293,7 +297,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
               display: true,
               text: 'Preço Unitário',
             }
-          }
+          },
         },
       });
 
@@ -326,8 +330,6 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
   criaGraficoTaxa(){
     if(this.comparativo.value) {
-      console.log(this.graphicTaxasComparativo);
-      console.log(this.graphicTaxas);
       this.chart2 = new Chart('precoTaxa', {
         type : 'line',
         data: {
