@@ -42,33 +42,6 @@
     align-items: center;
     backdrop-filter: blur(20px);
   }
-  .lembrar-senha {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    margin: 8px 0;
-
-    .check-box-area {
-      display: flex;
-      flex-direction: row;
-
-      input {
-        margin: 0;
-        width: 15px;
-        margin: 0 8px;
-      }
-
-      span {
-        width: 200px;
-        font-weight: 500;
-      }
-
-      a {
-        color: #3C4FF4;
-      }
-    }
-  }
 
   .signup {
     display: flex;

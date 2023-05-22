@@ -12,23 +12,23 @@
       </tr>
       <tr>
         <th>PU</th>
-        <td>R$ {{ tesouro['PU'].toFixed(2) }}</td>
+        <td>{{ tesouro['PU'] | currency:'BRL' }}</td>
       </tr>
       <tr>
         <th>Quantidade</th>
         <td>{{ tesouro['quantidade'] }}</td>
       </tr>
       <tr>
-        <th>Valor</th>
-        <td>R$ {{ tesouro['valor'] }}</td>
+        <th>Valor Negociável</th>
+        <td>{{ tesouro['valor'] | currency:'BRL' }}</td>
       </tr>
 
     </tbody>
   </table>
 
-  <div class="graficos">
+  <!-- <div class="graficos">
     <canvas id="taxaRetorno"> {{chart4}}</canvas>
-  </div>
+  </div> -->
 
 </div>
 

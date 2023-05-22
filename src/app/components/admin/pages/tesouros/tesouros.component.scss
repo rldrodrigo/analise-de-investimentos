@@ -6,6 +6,10 @@
   align-items: center;
 }
 
+h1 {
+  color: var(--text-body);
+}
+
 .mat-elevation-z8 {
   width: 80%;
   margin: 15px;
@@ -28,10 +32,28 @@ td, th {
   margin-bottom: 45px;
 }
 
+.select-period {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  span {
+    font-weight: 600;
+  }
+
+}
+
 .date-picker {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  flex-direction: column;
 
   input {
     width: 200px;
@@ -46,18 +68,18 @@ td, th {
 .botao-submit {
   width: 200px;
   padding: 10px;
-  background-color: rgb(69, 138, 78);
-  border-radius: 15px;
+  background: $roxo;
+  border-radius: 10px;
   font-weight: bold;
   text-transform: uppercase;
-  color: white;
-  margin: 0 auto;
-}
+  color: $branco;
+  background: $roxo;
+  font-size: 18px;
 
-.botao-submit:hover {
-  background-color: rgb(55, 110, 63);
+  &:hover {
+    background: darken($roxo, 20%);
+  }
 }
-
 
 .formulario {
   width: 80%;
@@ -70,10 +92,14 @@ td, th {
 .graficos {
   display: flex;
   flex-direction: row;
+
+
+  @media (max-width: 1350px) {
+    flex-wrap: wrap;
+  }
 }
 
 .grafico {
   padding: 25px;
   width: 100%;
 }
-

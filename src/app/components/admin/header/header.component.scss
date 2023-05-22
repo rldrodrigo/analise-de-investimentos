@@ -1,3 +1,5 @@
+@import '~/src/scss/base/variables';
+
 :host {
   header {
     background-color: var(--primary);
@@ -33,16 +35,16 @@
         }
 
         .exit-button {
-          background-color: #6680f3;
+          background-color: #360083;
           border-radius: 8px;
           border-style: none;
           box-sizing: border-box;
-          color: #FFFFFF;
+          color: #FFF;
           cursor: pointer;
           display: inline-block;
+          font-weight: bold;
           font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
           font-size: 14px;
-          font-weight: 500;
           height: 40px;
           line-height: 20px;
           list-style: none;
@@ -58,9 +60,10 @@
           -webkit-user-select: none;
           touch-action: manipulation;
 
-          :hover,
-          :focus {
-            background-color: #F082AC;
+          &:hover,
+          &:focus {
+            background-color: #9654f4;
+            color: #FFF;
           }
         }
       }

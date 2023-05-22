@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   host: 'http://localhost:4200',
-  api: 'http://ec2-18-231-91-106.sa-east-1.compute.amazonaws.com:5000/api',
+  api: 'http://localhost:5000/api',
 };
 
 /*

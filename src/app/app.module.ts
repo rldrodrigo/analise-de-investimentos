@@ -10,7 +10,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { LOCALE_ID } from '@angular/core';
+import localePt from '@angular/common/locales/pt';
+import {registerLocaleData} from '@angular/common';
+registerLocaleData(localePt)
 @NgModule({
   declarations: [
     AppComponent
@@ -27,7 +30,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
     ReactiveFormsModule,
   ],
-  providers: [MatIconModule],
+  providers: [
+    MatIconModule,
+    {
+      provide: LOCALE_ID,
+      useValue: "pt-BR"
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,11 +4,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { SignComponent } from './pages/sign/sign.component';
+import { SignupComponent } from './pages/signup/signup.component';
 
 
 @NgModule({
   declarations: [
-    SignComponent
+    SignComponent,
+    SignupComponent
   ],
   imports: [
     CommonModule,

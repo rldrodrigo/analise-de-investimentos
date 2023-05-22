@@ -34,6 +34,24 @@ export class AuthService {
     )
   }
 
+  public signup(payload: {name: string, email: string, password: string, confirmPassword: string}): Observable<any> {
+
+    return this.http.post<{token: string}>(`${this.url}/user/signup`, payload).pipe(
+      map( (res: any) => {
+        localStorage.removeItem('access_token');
+        localStorage.setItem('access_token', JSON.stringify(res._id));
+        return this.router.navigate(['admin']);
+      }),
+      catchError((e: any) => {
+        if(e.error) {
+          return throwError(e.error.error);
+        }
+
+        return throwError("Servidor não está respondendo.");
+      })
+    )
+  }
+
   public logout() {
     localStorage.removeItem('access_token');
 

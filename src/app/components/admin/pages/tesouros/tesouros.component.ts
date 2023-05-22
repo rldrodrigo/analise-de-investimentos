@@ -69,6 +69,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   chart: any = [];
   chart2: any = [];
   chart3: any = [];
+  chart4: any = [];
   tesouroForm: FormGroup;
 
   constructor(
@@ -184,6 +185,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         });
 
         this.criaGraficoTaxa();
+        this.criaGraficoRetornoComparativo();
       })
     } else {
       this.trasuryBoundService.listarTesourosTaxa(tesouro, vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
@@ -201,6 +203,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         });
 
         this.criaGraficoTaxa();
+        this.criaGraficoTaxaRetorno();
       })
     }
   }
@@ -283,14 +286,16 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             {
               label: `${this.tipo.value} ${this.dataVencimento.value}`,
               data: this.graphicData,
-              borderColor: '#FF336B',
-              fill: false,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
             },
             {
               label: `${this.comparativo.value} ${this.dataComparativo.value}`,
               data: this.graphicComparativoData,
-              borderColor: 'blue',
-              fill: false,
+              borderColor: '#933FFA',
+              backgroundColor: '#933FFA55',
+              fill: true,
             }
           ]
         },
@@ -315,8 +320,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicData,
-            borderColor: '#FF336B',
-            fill: false,
+            borderColor: '#6200EE',
+            backgroundColor: '#6200EE55 ',
+            fill: true,
           }]
         },
         options: {
@@ -343,13 +349,15 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicTaxas,
-            borderColor: '#33D1FF',
-            fill: false,
+            borderColor: '#6200EE',
+            backgroundColor: '#6200EE55 ',
+            fill: true,
           }, {
             label: `${this.comparativo.value} ${this.dataComparativo.value}`,
             data: this.graphicTaxasComparativo,
-            borderColor: '#D1F',
-            fill: false,
+            borderColor: '#933FFA',
+            backgroundColor: '#933FFA55',
+            fill: true,
           }]
         },
         options: {
@@ -372,8 +380,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicTaxas,
-            borderColor: '#33D1FF',
-            fill: false,
+            borderColor: '#6200EE55',
+            fill: true,
+            backgroundColor: '#6200EE55',
           }]
         },
         options: {
@@ -400,11 +409,15 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graficoQuantidade,
-            backgroundColor: "#8c6bef"
+            backgroundColor: "#8133f1",
+            borderColor: 'white',
+            borderWidth: 2,
           }, {
             label: `${this.comparativo.value} ${this.dataComparativo.value}`,
             data: this.graficoQuantidadeComparativo,
-            backgroundColor: "#f00a5e"
+            backgroundColor: "#b78af7",
+            borderColor: 'white',
+            borderWidth: 2,
           }]
         },
         options: {
@@ -427,7 +440,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graficoQuantidade,
-            backgroundColor: "#8c6bef"
+            backgroundColor: "#8133f1",
+            borderColor: 'white',
+            borderWidth: 2,
           }]
         },
         options: {
@@ -482,6 +497,75 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
     this.comparativo.setValue(undefined);
     this.dataComparativo.setValue(undefined);
   }
+
+  criaGraficoTaxaRetorno() {
+    this.graphicTaxaRetorno.shift();
+    this.chart4 = new Chart('taxaRetorno', {
+      type : 'line',
+      data: {
+        datasets: [
+          {
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
+            data: this.graphicTaxaRetorno,
+            borderColor: '#6200EE',
+            backgroundColor: '#6200EE55 ',
+            fill: true,
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Taxa de Retorno Diário',
+          }
+        },
+      },
+    });
+  }
+
+  criaGraficoRetornoComparativo() {
+    this.graphicTaxaRetorno.shift();
+    this.graphicTaxaRetornoComparativo.shift();
+    this.chart4 = new Chart('taxaRetorno', {
+      type : 'line',
+      data: {
+        datasets: [
+          {
+            label: `${this.tipo.value} ${this.dataVencimento.value}`,
+            data: this.graphicTaxaRetorno,
+            borderColor: '#6200EE',
+            backgroundColor: '#6200EE55 ',
+            fill: true,
+          },
+          {
+            label: `${this.comparativo.value} ${this.dataComparativo.value}`,
+            data:  this.graphicTaxaRetornoComparativo,
+            borderColor: '#933FFA',
+            backgroundColor: '#933FFA55',
+            fill: true,
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Taxa de Retorno',
+          }
+        },
+      },
+    });
+  }
+
 
   get initialDate() {
     return this.tesouroForm.get('initialDate') as FormControl;
