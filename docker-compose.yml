@@ -5,4 +5,4 @@ services:
     image: analise-ativos
     build: .
     ports:
-      - 8081:80
+      - 80:80
