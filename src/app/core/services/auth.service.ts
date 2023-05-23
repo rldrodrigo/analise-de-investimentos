@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private url: string = environment.api;
+  // private url: string = environment.api;
+  private url: string = 'http://35.247.195.146:5000/api';
 
   constructor(
     private http: HttpClient,
@@ -18,7 +19,7 @@ export class AuthService {
 
   public sign(payload: {email: string, password: string}): Observable<any> {
 
-    return this.http.post<{token: string}>(`http://35.247.195.146:5000/api/user/login`, payload).pipe(
+    return this.http.post<{token: string}>(`${this.url}/user/login`, payload).pipe(
       map( (res: any) => {
         localStorage.removeItem('access_token');
         localStorage.setItem('access_token', JSON.stringify(res._id));
