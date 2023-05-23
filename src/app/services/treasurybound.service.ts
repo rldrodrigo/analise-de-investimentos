@@ -6,7 +6,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TreasuryboundService {
-  readonly urlApi = environment.api;
+  // readonly urlApi = environment.api;
+  readonly urlApi = 'http://35.247.195.146:5000'
 
   constructor(
     private http: HttpClient,
