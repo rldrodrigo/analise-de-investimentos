@@ -81,6 +81,14 @@
   <div class="grafico" *ngIf="pesquisou">
     <canvas id="taxaRetorno"> {{chart4}}</canvas>
   </div>
+  <div class="graficos">
+    <div class="grafico" *ngIf="pesquisou">
+      <canvas id="risco"> {{chartRisco}}</canvas>
+    </div>
+    <div class="grafico" *ngIf="pesquisou">
+      <canvas id="value-at-risk"> {{chartVaR}}</canvas>
+    </div>
+  </div>
 
 
   <div class="table-area">

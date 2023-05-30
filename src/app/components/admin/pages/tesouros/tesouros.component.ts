@@ -59,6 +59,13 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   graphicTaxaRetorno: any = [];
   graphicTaxaRetornoComparativo: any = [];
 
+
+  graphicRiscoData: any = [];
+  graphicRiscoDataComparativo: any = [];
+
+  graphicVaRData: any = [];
+  graphicVaRDataComparativo: any = [];
+
   tesouros: any = [];
   tesourosComparativo: any = [];
   pesquisou: boolean = false;
@@ -70,6 +77,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   chart2: any = [];
   chart3: any = [];
   chart4: any = [];
+  chartRisco: any = [];
+  chartVaR: any = [];
   tesouroForm: FormGroup;
 
   constructor(
@@ -107,7 +116,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
       this.dataSource.paginator = this.paginator;
       this.graphicData = [];
       this.graphicTaxaRetorno = [];
-      this.graphicLabels = [];
+      this.graphicRiscoData = [];
+      this.graphicVaRData = [];
       this.tesouros.map((item: any) => {
         let newItem = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
@@ -116,9 +126,19 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         let TaxaRetorno = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['taxa_retorno_logaritmica'],
+        };
+        let risco = {
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['risco'],
+        };
+        let valueAtRisk = {
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['value_at_risk'],
         }
         this.graphicData.push(newItem);
         this.graphicTaxaRetorno.push(TaxaRetorno);
+        this.graphicRiscoData.push(risco);
+        this.graphicVaRData.push(valueAtRisk);
       });
       this.criaGrafico();
     });
@@ -136,6 +156,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
       this.graphicComparativoData = [];
       this.graphicTaxaRetornoComparativo = [];
+      this.graphicRiscoDataComparativo = [];
+      this.graphicVaRDataComparativo = [];
 
       this.tesourosComparativo.map((item: any) => {
         // let nova_data = new Date(item['data_venda']['$date'])
@@ -146,9 +168,19 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         let TaxaRetorno = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['taxa_retorno_logaritmica'],
+        };
+        let risco = {
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['risco'],
+        };
+        let valueAtRisk = {
+          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['value_at_risk'],
         }
         this.graphicComparativoData.push(newItem);
         this.graphicTaxaRetornoComparativo.push(TaxaRetorno);
+        this.graphicRiscoDataComparativo.push(risco);
+        this.graphicVaRDataComparativo.push(valueAtRisk);
       });
       this.getData(this.tipo.value, this.dataVencimento.value);
       this.pesquisou = true;
@@ -186,6 +218,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
         this.criaGraficoTaxa();
         this.criaGraficoRetornoComparativo();
+        this.criaGraficoRisco();
+        this.criaGraficoVaR();
       })
     } else {
       this.trasuryBoundService.listarTesourosTaxa(tesouro, vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
@@ -204,6 +238,8 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
         this.criaGraficoTaxa();
         this.criaGraficoTaxaRetorno();
+        this.criaGraficoRisco();
+        this.criaGraficoVaR();
       })
     }
   }
@@ -564,6 +600,136 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
         },
       },
     });
+  }
+
+  criaGraficoRisco() {
+    if (!this.tesourosComparativo) {
+      this.chartRisco = new Chart('risco', {
+        type : 'line',
+        data: {
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: this.graphicRiscoData,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Risco do título',
+            }
+          },
+        },
+      });
+    } else {
+      this.chartRisco = new Chart('risco', {
+        type : 'line',
+        data: {
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: this.graphicRiscoData,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
+            },
+            {
+              label: `${this.comparativo.value} ${this.dataComparativo.value}`,
+              data:  this.graphicRiscoDataComparativo,
+              borderColor: '#933FFA',
+              backgroundColor: '#933FFA55',
+              fill: true,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Risco do título',
+            }
+          },
+        },
+      });
+      }
+  }
+
+  criaGraficoVaR() {
+    if (!this.tesourosComparativo) {
+      this.chartVaR = new Chart('value-at-risk', {
+        type : 'line',
+        data: {
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: this.graphicVaRData,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Value at Risk',
+            }
+          },
+        },
+      });
+    } else {
+      this.chartVaR = new Chart('value-at-risk', {
+        type : 'line',
+        data: {
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: this.graphicVaRData,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
+            },
+            {
+              label: `${this.comparativo.value} ${this.dataComparativo.value}`,
+              data:  this.graphicVaRDataComparativo,
+              borderColor: '#933FFA',
+              backgroundColor: '#933FFA55',
+              fill: true,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Value at Risk',
+            }
+          },
+        },
+      });
+      }
   }
 
 
