@@ -428,7 +428,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
             title: {
               display: true,
-              text: 'Quantidade de Vendas'
+              text: 'Volume de Vendas'
             }
           }
         },
@@ -453,7 +453,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
             title: {
               display: true,
-              text: 'Quantidade de Vendas'
+              text: 'Volume de Vendas'
             }
           }
         },
