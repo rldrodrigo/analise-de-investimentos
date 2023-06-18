@@ -1,5 +1,5 @@
 <div class="tesouro">
-  <h1>	<mat-icon>account_balance</mat-icon> {{ tesouro['tipo_titulo'] }}</h1>
+  <h1>	<mat-icon>account_balance</mat-icon> {{ tesouro['tipo_titulo']+' '+tesouro['ano_vencimento'] }}</h1>
   <table>
     <tbody>
       <tr>
@@ -11,7 +11,7 @@
         <td>{{ tesouro['data_venda']['$date'] | date : 'dd/MM/yyyy' : '+00:00' }}</td>
       </tr>
       <tr>
-        <th>PU</th>
+        <th>Preço Unitário (PU)</th>
         <td>{{ tesouro['PU'] | currency:'BRL' }}</td>
       </tr>
       <tr>

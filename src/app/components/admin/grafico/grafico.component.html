@@ -1,0 +1,7 @@
+<!-- <div class="grafico" *ngIf="pesquisou">
+  <canvas [id]="name"> {{chart}}</canvas>
+</div> -->
+
+<div class="grafico" *ngIf="chart && pesquisou">
+  <canvas [id]="name">{{ chart }}</canvas>
+</div>

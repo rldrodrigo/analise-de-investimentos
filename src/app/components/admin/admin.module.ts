@@ -13,8 +13,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { TesouroComponent } from './pages/tesouros/tesouro/tesouro.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import {MatInputModule} from '@angular/material/input';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatButtonModule } from '@angular/material/button';
+import { GraficoComponent } from './grafico/grafico.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -23,6 +30,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MenuComponent,
     TesourosComponent,
     TesouroComponent,
+    SettingsComponent,
+    DashboardComponent,
+    GraficoComponent,
   ],
   imports: [
     CommonModule,
@@ -33,9 +43,13 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatFormFieldModule,
     MatSelectModule,
     MatNativeDateModule,
-    MatFormFieldModule,
     ReactiveFormsModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatButtonModule,
+    MatStepperModule,
+    FormsModule,
+    MatInputModule,
+    MatTooltipModule,
   ]
 })
 export class AdminModule { }

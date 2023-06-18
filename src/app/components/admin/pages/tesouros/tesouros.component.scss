@@ -64,10 +64,15 @@ td, th {
     border-radius: 5px;
   }
 }
-
+.form-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
 .botao-submit {
   width: 200px;
-  padding: 10px;
+  padding: 0px;
+  margin-right: 15px;
   background: $roxo;
   border-radius: 10px;
   font-weight: bold;
@@ -92,7 +97,7 @@ td, th {
 .graficos {
   display: flex;
   flex-direction: row;
-
+  width: 100%;
 
   @media (max-width: 1350px) {
     flex-wrap: wrap;
@@ -102,4 +107,16 @@ td, th {
 .grafico {
   padding: 25px;
   width: 100%;
+  min-height: 300px;
+}
+
+.sem-registro {
+  background-color: #CCC;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  min-height: 50px;
+  margin: 30px 0;
 }

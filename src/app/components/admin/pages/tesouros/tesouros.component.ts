@@ -5,7 +5,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TesouroComponent } from './tesouro/tesouro.component';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Chart, registerables } from 'chart.js';
 
 
@@ -21,10 +21,9 @@ export interface Tesouro {
 @Component({
   selector: 'app-tesouros',
   templateUrl: './tesouros.component.html',
-  styleUrls: ['./tesouros.component.scss']
+  styleUrls: ['./tesouros.component.scss'],
 })
 export class TesourosComponent implements OnInit, AfterViewInit  {
-
 
   displayedColumns: string[] = ['Tipo Titulo', 'Vencimento do Titulo', 'Data Venda', 'PU', 'Quantidade', 'Valor', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
@@ -48,11 +47,9 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   graphicData: any = [];
   graphicComparativoData: any = [];
 
-  graphicTaxasLabels: any = [];
   graphicTaxas: any = [];
   graphicTaxasComparativo: any = [];
 
-  graficoQuantidadeLabels: any = [];
   graficoQuantidade: any = []
   graficoQuantidadeComparativo: any = [];
 
@@ -71,7 +68,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   pesquisou: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild("meuCanvas", { static: true }) elemento!: ElementRef;
+  // @ViewChild("meuCanvas", { static: true }) elemento!: ElementRef;
 
   chart: any = [];
   chart2: any = [];
@@ -79,7 +76,10 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   chart4: any = [];
   chartRisco: any = [];
   chartVaR: any = [];
-  tesouroForm: FormGroup;
+  tesouroForm1: FormGroup;
+  tesouroForm2: FormGroup;
+  tesouroDate: FormGroup;
+
 
   constructor(
     private trasuryBoundService: TreasuryboundService,
@@ -87,13 +87,17 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
     private fb: FormBuilder,
   ) {
     Chart.register(...registerables);
-    this.tesouroForm = this.fb.group({
+    this.tesouroForm1 = this.fb.group({
+      tipo: ['', Validators.required],
+      dataVencimento: [''],
+    });
+    this.tesouroForm2 = this.fb.group({
+      comparativo: [''],
+      dataComparativo: ['']
+    });
+    this.tesouroDate = this.fb.group({
       initialDate: ['', Validators.required],
       finalDate: ['', Validators.required],
-      tipo: ['', Validators.required],
-      comparativo: [''],
-      dataVencimento: [''],
-      dataComparativo: ['']
     });
   }
 
@@ -103,192 +107,140 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
   ngAfterViewInit() {
   }
 
-  getData(tipo_titulo: string, ano_vencimento: string) {
-    this.trasuryBoundService.listTreasuriesBound(tipo_titulo, ano_vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
-      this.tesouros = res;
+  getData() {
+    if(this.comparativo.value) {
+      this.trasuryBoundService.listTreasuriesBound(this.comparativo.value, this.dataComparativo.value, this.initialDate.value, this.finalDate.value).then((res) => {
+        this.tesourosComparativo = res;
 
+        let initialDate = this.initialDate.value.split("-");
+        initialDate = new Date(initialDate[0], initialDate[1]-1, initialDate[2]);
+
+        let finalDate =  this.finalDate.value.split("-");
+        finalDate = new Date(finalDate[0], finalDate[1]-1, finalDate[2]);
+
+        this.graphicComparativoData = [];
+        this.graficoQuantidadeComparativo = [];
+
+        res.map((item: any) => {
+          let dataPrecoUnitarioComparativo = {
+            x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+            y: item['PU'],
+          };
+          let dataQuantidadeComparativo = {
+            x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+            y: item['quantidade'],
+          };
+          this.graficoQuantidadeComparativo.push(dataQuantidadeComparativo);
+          this.graphicComparativoData.push(dataPrecoUnitarioComparativo);
+        });
+        this.getGraphicData();
+      });
+    } else {
+      this.getGraphicData();
+    }
+  }
+
+  getGraphicData() {
+    this.trasuryBoundService.listTreasuriesBound(this.tipo.value,  this.dataVencimento.value, this.initialDate.value, this.finalDate.value).then((res) => {
+      this.tesouros = res;
       let initialDate = this.initialDate.value.split("-");
       initialDate = new Date(initialDate[0], initialDate[1]-1, initialDate[2]);
       let finalDate =  this.finalDate.value.split("-");
       finalDate = new Date(finalDate[0], finalDate[1]-1, finalDate[2]);
-
       this.dataSource = new MatTableDataSource(this.tesouros);
       this.dataSource.paginator = this.paginator;
       this.graphicData = [];
-      this.graphicTaxaRetorno = [];
-      this.graphicRiscoData = [];
-      this.graphicVaRData = [];
-      this.tesouros.map((item: any) => {
-        let newItem = {
+      this.graficoQuantidade = [];
+      res.map((item: any) => {
+        let dataPrecoUnitario = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
           y: item['PU'],
         };
-        let TaxaRetorno = {
+        let dataQuantidade = {
           x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          y: item['quantidade'],
+        };
+        this.graficoQuantidade.push(dataQuantidade);
+        this.graphicData.push(dataPrecoUnitario);
+      });
+      this.criaGrafico();
+      this.criarGraficoQuantidade();
+    });
+  }
+
+
+  getDataTaxa() {
+    if(this.comparativo.value) {
+      this.trasuryBoundService.listarTesourosTaxa(this.comparativo.value, this.dataComparativo.value, this.initialDate.value, this.finalDate.value).then((res) => {
+        this.graphicTaxasComparativo = [];
+        this.graphicTaxaRetornoComparativo = [];
+        this.graphicRiscoDataComparativo = [];
+        this.graphicVaRDataComparativo = [];
+        res.map((item: any) => {
+          let taxaComparativo = {
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
+            y: item['taxa_compra_manha'],
+          };
+          let TaxaRetornoComparativo = {
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
+            y: item['taxa_retorno_logaritmica'],
+          };
+          let riscoComparativo = {
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
+            y: item['risco'],
+          };
+          let valueAtRiskComparativo = {
+            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
+            y: item['value_at_risk'],
+          }
+          this.graphicTaxasComparativo.push(taxaComparativo);
+          this.graphicTaxaRetornoComparativo.push(TaxaRetornoComparativo);
+          this.graphicRiscoDataComparativo.push(riscoComparativo);
+          this.graphicVaRDataComparativo.push(valueAtRiskComparativo);
+        });
+        this.getGraphicDataTaxa();
+      })
+    } else {
+      this.getGraphicDataTaxa();
+    }
+
+  }
+
+  getGraphicDataTaxa() {
+    this.trasuryBoundService.listarTesourosTaxa(this.tipo.value, this.dataVencimento.value, this.initialDate.value, this.finalDate.value).then((res) => {
+      this.graphicTaxas = [];
+      this.graphicTaxaRetorno = [];
+      this.graphicRiscoData = [];
+      this.graphicVaRData = [];
+      res.map((item: any) => {
+        let newItem = {
+          x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
+          y: item['taxa_compra_manha'],
+        };
+        let TaxaRetorno = {
+          x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
           y: item['taxa_retorno_logaritmica'],
         };
         let risco = {
-          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
           y: item['risco'],
         };
         let valueAtRisk = {
-          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
+          x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
           y: item['value_at_risk'],
         }
-        this.graphicData.push(newItem);
+        this.graphicTaxas.push(newItem);
         this.graphicTaxaRetorno.push(TaxaRetorno);
         this.graphicRiscoData.push(risco);
         this.graphicVaRData.push(valueAtRisk);
       });
-      this.criaGrafico();
-    });
-  }
 
-  getDataComparativo(tipo_titulo: string, ano_vencimento: string) {
-    this.trasuryBoundService.listTreasuriesBound(tipo_titulo, ano_vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
-      this.tesourosComparativo = res;
-
-      let initialDate = this.initialDate.value.split("-");
-      initialDate = new Date(initialDate[0], initialDate[1]-1, initialDate[2]);
-
-      let finalDate =  this.finalDate.value.split("-");
-      finalDate = new Date(finalDate[0], finalDate[1]-1, finalDate[2]);
-
-      this.graphicComparativoData = [];
-      this.graphicTaxaRetornoComparativo = [];
-      this.graphicRiscoDataComparativo = [];
-      this.graphicVaRDataComparativo = [];
-
-      this.tesourosComparativo.map((item: any) => {
-        // let nova_data = new Date(item['data_venda']['$date'])
-        let newItem = {
-          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-          y: item['PU'],
-        };
-        let TaxaRetorno = {
-          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-          y: item['taxa_retorno_logaritmica'],
-        };
-        let risco = {
-          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-          y: item['risco'],
-        };
-        let valueAtRisk = {
-          x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-          y: item['value_at_risk'],
-        }
-        this.graphicComparativoData.push(newItem);
-        this.graphicTaxaRetornoComparativo.push(TaxaRetorno);
-        this.graphicRiscoDataComparativo.push(risco);
-        this.graphicVaRDataComparativo.push(valueAtRisk);
-      });
-      this.getData(this.tipo.value, this.dataVencimento.value);
       this.pesquisou = true;
-    });
-  }
-
-  getDataTaxa(tesouro: string, vencimento: string, comparativo?: boolean) {
-    if(comparativo) {
-      this.trasuryBoundService.listarTesourosTaxa(tesouro, vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
-        let dados = res;
-
-        this.graphicTaxasComparativo = [];
-        dados.map((item: any) => {
-          // let nova_data = new Date(item['data_base']['$date'])
-          let newItem = {
-            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
-            y: item['taxa_compra_manha'],
-          };
-          this.graphicTaxasComparativo.push(newItem);
-        });
-      })
-      this.trasuryBoundService.listarTesourosTaxa(this.tipo.value, this.dataVencimento.value, this.initialDate.value, this.finalDate.value).then((res) => {
-        let dados = res;
-
-        this.graphicTaxas = [];
-        this.graphicTaxasLabels = [];
-        dados.map((item: any) => {
-          // let nova_data = new Date(item['data_base']['$date'])
-          let newItem = {
-            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
-            y: item['taxa_compra_manha'],
-          };
-          this.graphicTaxas.push(newItem);
-        });
-
-        this.criaGraficoTaxa();
-        this.criaGraficoRetornoComparativo();
-        this.criaGraficoRisco();
-        this.criaGraficoVaR();
-      })
-    } else {
-      this.trasuryBoundService.listarTesourosTaxa(tesouro, vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
-        let dados = res;
-
-        this.graphicTaxas = [];
-        this.graphicTaxasLabels = [];
-        dados.map((item: any) => {
-          // let nova_data = new Date(item['data_base']['$date'])
-          let newItem = {
-            x: `${item['data_base']['$date'].substring(8, 10)}/${item['data_base']['$date'].substring(5, 7)}/${item['data_base']['$date'].substring(0, 4)}`,
-            y: item['taxa_compra_manha'],
-          };
-          this.graphicTaxas.push(newItem);
-        });
-
-        this.criaGraficoTaxa();
-        this.criaGraficoTaxaRetorno();
-        this.criaGraficoRisco();
-        this.criaGraficoVaR();
-      })
-    }
-  }
-
-  getDataQuantidade(tesouro: string, vencimento: string, comparativo?: boolean) {
-    if(comparativo) {
-      this.trasuryBoundService.listTreasuriesBound(tesouro, vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
-        let dados = res;
-        this.graficoQuantidadeComparativo = [];
-        dados.map((item: any) => {
-          // let nova_data = new Date(item['data_venda']['$date'])
-          let newItem = {
-            x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-            y: item['quantidade'],
-          };
-          this.graficoQuantidadeComparativo.push(newItem);
-        });
-        this.trasuryBoundService.listTreasuriesBound(this.tipo.value, this.dataVencimento.value, this.initialDate.value, this.finalDate.value).then((res) => {
-          let dados = res;
-          this.graficoQuantidade = [];
-          this.graficoQuantidadeLabels = [];
-          dados.map((item: any) => {
-            // let nova_data = new Date(item['data_venda']['$date'])
-            let newItem = {
-              x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-              y: item['quantidade'],
-            };
-            this.graficoQuantidade.push(newItem);
-          });
-          this.criarGraficoQuantidade();
-        });
-      });
-    } else {
-      this.trasuryBoundService.listTreasuriesBound(tesouro, vencimento, this.initialDate.value, this.finalDate.value).then((res) => {
-        let dados = res;
-
-        this.graficoQuantidade = [];
-        this.graficoQuantidadeLabels = [];
-        dados.map((item: any) => {
-          // let nova_data = new Date(item['data_venda']['$date'])
-          let newItem = {
-            x: `${item['data_venda']['$date'].substring(8, 10)}/${item['data_venda']['$date'].substring(5, 7)}/${item['data_venda']['$date'].substring(0, 4)}`,
-            y: item['quantidade'],
-          };
-          this.graficoQuantidade.push(newItem);
-        });
-        this.criarGraficoQuantidade();
-      });
-    }
+      this.criaGraficoTaxa();
+      this.criaGraficoTaxaRetorno();
+      this.criaGraficoRisco();
+      this.criaGraficoVaR();
+    })
   }
 
   AbrirModalTesouro(item: any){
@@ -323,7 +275,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
               label: `${this.tipo.value} ${this.dataVencimento.value}`,
               data: this.graphicData,
               borderColor: '#6200EE',
-              backgroundColor: '#6200EE55 ',
+              backgroundColor: '#6200EE55',
               fill: true,
             },
             {
@@ -335,18 +287,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             }
           ]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Preço Unitário',
-            }
-          },
-        },
+        options:  this.createChartOptions('Preço Unitário', 24),
       });
 
     } else {
@@ -361,18 +302,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             fill: true,
           }]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Preço Unitário'
-            }
-          }
-        },
+        options: this.createChartOptions('Preço Unitário', 24),
       });
     }
   }
@@ -396,18 +326,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             fill: true,
           }]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Valor da Taxa'
-            }
-          }
-        },
+        options: this.createChartOptions('Valor da Taxa', 24),
       });
     } else {
       this.chart2 = new Chart('precoTaxa', {
@@ -416,23 +335,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           datasets: [{
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graphicTaxas,
-            borderColor: '#6200EE55',
+            borderColor: '#6200EE',
             fill: true,
             backgroundColor: '#6200EE55',
           }]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Valor da Taxa'
-            }
-          }
-        },
+        options: this.createChartOptions('Valor da Taxa', 24),
       });
     }
   }
@@ -446,28 +354,17 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graficoQuantidade,
             backgroundColor: "#8133f1",
-            borderColor: 'white',
+            borderColor: '#b78af7',
             borderWidth: 2,
           }, {
             label: `${this.comparativo.value} ${this.dataComparativo.value}`,
             data: this.graficoQuantidadeComparativo,
             backgroundColor: "#b78af7",
-            borderColor: 'white',
+            borderColor: '#8133f1',
             borderWidth: 2,
           }]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Volume de Vendas'
-            }
-          }
-        },
+        options: this.createChartOptions('Volume de Vendas', 24),
       });
     } else {
       this.chart3 = new Chart('quantidadeVendas', {
@@ -477,38 +374,20 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             label: `${this.tipo.value} ${this.dataVencimento.value}`,
             data: this.graficoQuantidade,
             backgroundColor: "#8133f1",
-            borderColor: 'white',
+            borderColor: '#b78af7',
             borderWidth: 2,
           }]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Volume de Vendas'
-            }
-          }
-        },
+        options: this.createChartOptions('Volume de Vendas', 24),
       });
     }
   }
 
   submitForm(): void {
-    if (!this.tesouroForm.invalid) {
-      if(this.comparativo.value) {
-        this.getDataComparativo(this.comparativo.value, this.dataComparativo.value)
-        this.getDataTaxa(this.comparativo.value, this.dataComparativo.value, true)
-        this.getDataQuantidade(this.comparativo.value, this.dataComparativo.value, true)
-      } else {
-        this.getData(this.tipo.value, this.dataVencimento.value);
-        this.getDataTaxa(this.tipo.value, this.dataVencimento.value);
-        this.getDataQuantidade(this.tipo.value, this.dataVencimento.value);
+    if (!this.tesouroForm1.invalid && !this.tesouroDate.invalid) {
+        this.getData();
+        this.getDataTaxa();
         this.pesquisou = true;
-      }
     }
   }
 
@@ -530,80 +409,60 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
 
   novaConsulta() {
     this.pesquisou = false;
-    this.comparativo.setValue(undefined);
-    this.dataComparativo.setValue(undefined);
   }
 
   criaGraficoTaxaRetorno() {
-    this.graphicTaxaRetorno.shift();
-    this.chart4 = new Chart('taxaRetorno', {
-      type : 'line',
-      data: {
-        datasets: [
-          {
-            label: `${this.tipo.value} ${this.dataVencimento.value}`,
-            data: this.graphicTaxaRetorno,
-            borderColor: '#6200EE',
-            backgroundColor: '#6200EE55 ',
-            fill: true,
-          },
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Taxa de Retorno Diário',
-          }
+    if(this.comparativo.value) {
+      const taxaRetornoData = this.graphicTaxaRetorno.slice();
+      taxaRetornoData.shift();
+      const taxaRetornoComparativoData = this.graphicTaxaRetornoComparativo.slice();
+      taxaRetornoComparativoData.shift()
+      this.chart4 = new Chart('taxaRetorno', {
+        type : 'line',
+        data: {
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: taxaRetornoData,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
+            },
+            {
+              label: `${this.comparativo.value} ${this.dataComparativo.value}`,
+              data: taxaRetornoComparativoData,
+              borderColor: '#933FFA',
+              backgroundColor: '#933FFA55',
+              fill: true,
+            },
+          ]
         },
-      },
-    });
+        options: this.createChartOptions('Taxa de Retorno', 24),
+      });
+    } else {
+      const taxaRetornoData = this.graphicTaxaRetorno.slice();
+      taxaRetornoData.shift();
+      this.chart4 = new Chart('taxaRetorno', {
+        type : 'line',
+        data: {
+          datasets: [
+            {
+              label: `${this.tipo.value} ${this.dataVencimento.value}`,
+              data: taxaRetornoData,
+              borderColor: '#6200EE',
+              backgroundColor: '#6200EE55 ',
+              fill: true,
+            },
+          ]
+        },
+        options: this.createChartOptions('Taxa de Retorno', 24),
+      });
+    }
   }
 
-  criaGraficoRetornoComparativo() {
-    this.graphicTaxaRetorno.shift();
-    this.graphicTaxaRetornoComparativo.shift();
-    this.chart4 = new Chart('taxaRetorno', {
-      type : 'line',
-      data: {
-        datasets: [
-          {
-            label: `${this.tipo.value} ${this.dataVencimento.value}`,
-            data: this.graphicTaxaRetorno,
-            borderColor: '#6200EE',
-            backgroundColor: '#6200EE55 ',
-            fill: true,
-          },
-          {
-            label: `${this.comparativo.value} ${this.dataComparativo.value}`,
-            data:  this.graphicTaxaRetornoComparativo,
-            borderColor: '#933FFA',
-            backgroundColor: '#933FFA55',
-            fill: true,
-          },
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Taxa de Retorno',
-          }
-        },
-      },
-    });
-  }
 
   criaGraficoRisco() {
-    if (!this.tesourosComparativo) {
+    if (!this.comparativo.value) {
       this.chartRisco = new Chart('risco', {
         type : 'line',
         data: {
@@ -617,18 +476,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Risco do título',
-            }
-          },
-        },
+        options: this.createChartOptions('Risco do título', 24),
       });
     } else {
       this.chartRisco = new Chart('risco', {
@@ -651,24 +499,13 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Risco do título',
-            }
-          },
-        },
+        options: this.createChartOptions('Risco do título', 24),
       });
       }
   }
 
   criaGraficoVaR() {
-    if (!this.tesourosComparativo) {
+    if (!this.comparativo.value) {
       this.chartVaR = new Chart('value-at-risk', {
         type : 'line',
         data: {
@@ -682,18 +519,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Value at Risk',
-            }
-          },
-        },
+        options: this.createChartOptions('Value at Risk', 24),
       });
     } else {
       this.chartVaR = new Chart('value-at-risk', {
@@ -716,44 +542,56 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Value at Risk',
-            }
-          },
-        },
+        options: this.createChartOptions('Value at Risk', 24),
       });
       }
   }
 
+  createChartOptions(text: string, fontSize: number) {
+    const options:any = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels : {
+            font: {
+              size: fontSize
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: text,
+          font: {
+            size: fontSize
+          }
+        }
+      },
+    };
+    return options;
+  }
 
   get initialDate() {
-    return this.tesouroForm.get('initialDate') as FormControl;
+    return this.tesouroDate.get('initialDate') as FormControl;
   }
 
   get finalDate() {
-    return this.tesouroForm.get('finalDate') as FormControl;
+    return this.tesouroDate.get('finalDate') as FormControl;
   }
 
   get tipo() {
-    return this.tesouroForm.get('tipo') as FormControl;
-  }
-
-  get comparativo() {
-    return this.tesouroForm.get('comparativo') as FormControl;
+    return this.tesouroForm1.get('tipo') as FormControl;
   }
 
   get dataVencimento() {
-    return this.tesouroForm.get('dataVencimento') as FormControl;
+    return this.tesouroForm1.get('dataVencimento') as FormControl;
+  }
+
+  get comparativo() {
+    return this.tesouroForm2.get('comparativo') as FormControl;
   }
 
   get dataComparativo() {
-    return this.tesouroForm.get('dataComparativo') as FormControl;
+    return this.tesouroForm2.get('dataComparativo') as FormControl;
   }
 }

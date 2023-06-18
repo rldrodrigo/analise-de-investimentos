@@ -1,74 +1,104 @@
 <div class="conteudo-principal">
-  <h1>Vendas do Tesouro Direto</h1>
-  <button class="botao-submit" (click)="novaConsulta()" type="button" *ngIf="pesquisou">
-    Nova Consulta
-  </button>
-
-  <form [formGroup]="tesouroForm" class="formulario" *ngIf="!pesquisou">
-    <mat-form-field appearance="fill">
-      <mat-label>Selecione o Tipo de Titulo</mat-label>
-      <mat-select formControlName="tipo">
-        <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="selecionaPapel(titulo)">
-          {{titulo}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" >
-      <mat-label>Selecione a Data de vencimento </mat-label>
-      <mat-select formControlName="dataVencimento">
-        <mat-option value=""> Todos </mat-option>
-        <mat-option *ngFor="let data of listaDataVencimento" [value]="data" >
-          {{data}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Selecione o Titulo que será comparado</mat-label>
-      <mat-select formControlName="comparativo">
-        <mat-option value=""> Nenhum </mat-option>
-        <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="selecionaPapelComparativo(titulo)">
-          {{titulo}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" *ngIf="selecionouComparativo" >
-      <mat-label>Selecione a Data de vencimento do titulo que será comparado</mat-label>
-      <mat-select formControlName="dataComparativo">
-        <mat-option value=""> Todos </mat-option>
-        <mat-option *ngFor="let data of listaDataVencimentoComparativo" [value]="data">
-          {{data}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="select-period">
-      <span>Selecione o Período:</span>
-      <section class="select-period">
-        <div class="date-picker" >
-          <label> Data inicial</label>
-          <input type="date" formControlName="initialDate"  />
-        </div>
-        <div class="date-picker">
-          <label> Data final</label>
-          <input type="date" formControlName="finalDate" />
-        </div>
-      </section>
-    </div>
-
-
-    <button class="botao-submit" (click)="submitForm()" type="button">
-      Consultar
+  <h1>Análise de Ativos do Tesouro Direto</h1>
+  <div class="form-buttons">
+    <button class="botao-submit" mat-button (click)="novaConsulta()" type="button" *ngIf="pesquisou">
+      Nova Consulta
     </button>
-  </form>
+  </div>
 
-  <div class="graficos">
-    <div class="grafico" *ngIf="pesquisou">
-      <canvas id="canvas"> {{chart}}</canvas>
+  <div *ngIf="!pesquisou">
+    <mat-stepper linear #stepper>
+      <mat-step [stepControl]="tesouroForm1">
+        <form [formGroup]="tesouroForm1">
+          <mat-form-field appearance="fill">
+            <mat-label>Selecione o Tipo de Titulo</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="selecionaPapel(titulo)">
+                {{titulo}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" >
+            <mat-label>Selecione a Data de vencimento </mat-label>
+            <mat-select formControlName="dataVencimento">
+              <mat-option value=""> Todos </mat-option>
+              <mat-option *ngFor="let data of listaDataVencimento" [value]="data" >
+                {{data}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="form-buttons">
+            <button class="botao-submit" mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="tesouroForm2">
+        <form [formGroup]="tesouroForm2">
+          <mat-form-field appearance="fill">
+            <mat-label>Selecione o Titulo que será comparado</mat-label>
+            <mat-select formControlName="comparativo">
+              <mat-option value=""> Nenhum </mat-option>
+              <mat-option *ngFor="let titulo of TiposDeTitulos" [value]="titulo" (onSelectionChange)="selecionaPapelComparativo(titulo)">
+                {{titulo}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" *ngIf="selecionouComparativo" >
+            <mat-label>Selecione a Data de vencimento do titulo que será comparado</mat-label>
+            <mat-select formControlName="dataComparativo">
+              <mat-option value=""> Todos </mat-option>
+              <mat-option *ngFor="let data of listaDataVencimentoComparativo" [value]="data">
+                {{data}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="form-buttons">
+            <button class="botao-submit" mat-button matStepperPrevious>Back</button>
+            <button class="botao-submit" mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="tesouroDate">
+        <form [formGroup]="tesouroDate">
+          <div class="select-period">
+            <span>Selecione o Período:</span>
+            <section class="select-period">
+              <div class="date-picker" >
+                <label> Data inicial</label>
+                <input type="date" formControlName="initialDate"  />
+              </div>
+              <div class="date-picker">
+                <label> Data final</label>
+                <input type="date" formControlName="finalDate" />
+              </div>
+            </section>
+          </div>
+          <div class="form-buttons">
+            <button class="botao-submit" mat-button matStepperPrevious>Back</button>
+            <button class="botao-submit" mat-button (click)="submitForm()" type="button">
+              Consultar
+            </button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </div>
+  <!-- <app-grafico
+    [pesquisou]="pesquisou"
+    type="line"
+    [label]="this.tipo.value+' '+this.dataVencimento.value"
+    [data]="this.graphicData"
+    borderColor = 'blue'
+    backgroundColor = 'blue'
+    name="canvas"
+  ></app-grafico> -->
+  <div class="sem-registro"  *ngIf="pesquisou && graphicData.length <= 0">
+    Não houve volume de vendas no período selecionado
+  </div>
+  <div class="graficos" *ngIf="pesquisou">
+    <div class="grafico" *ngIf="pesquisou" >
+      <canvas id="canvas"> {{chart}} </canvas>
     </div>
-
     <div class="grafico" *ngIf="pesquisou">
       <canvas id="precoTaxa"> {{chart2}}</canvas>
     </div>
@@ -91,7 +121,7 @@
   </div>
 
 
-  <div class="table-area">
+  <div class="table-area" *ngIf="pesquisou">
     <div class="mat-elevation-z8" *ngIf="pesquisou">
       <h2>{{ tipo.value.value }}</h2>
       <table mat-table [dataSource]="dataSource">
