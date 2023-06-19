@@ -476,7 +476,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Risco do título', 24),
+        options: this.createChartOptions('Risco do título (Considerando pk = 1)', 24),
       });
     } else {
       this.chartRisco = new Chart('risco', {
@@ -519,7 +519,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Value at Risk', 24),
+        options: this.createChartOptions('Value at Risk (NC (95%) = 1,65) 〖-V〗_oi = 1000 ', 24),
       });
     } else {
       this.chartVaR = new Chart('value-at-risk', {
