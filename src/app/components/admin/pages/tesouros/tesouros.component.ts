@@ -287,7 +287,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             }
           ]
         },
-        options:  this.createChartOptions('Preço Unitário', 24),
+        options:  this.createChartOptions('Preço Unitário', 24, 'Preço Unitário', 'Data da Venda'),
       });
 
     } else {
@@ -302,7 +302,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             fill: true,
           }]
         },
-        options: this.createChartOptions('Preço Unitário', 24),
+        options: this.createChartOptions('Preço Unitário', 24, 'Preço Unitário', 'Data da Venda'),
       });
     }
   }
@@ -326,7 +326,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             fill: true,
           }]
         },
-        options: this.createChartOptions('Valor da Taxa', 24),
+        options: this.createChartOptions('Valor da Taxa', 24, 'Valor da Taxa', 'Data da Venda'),
       });
     } else {
       this.chart2 = new Chart('precoTaxa', {
@@ -340,7 +340,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             backgroundColor: '#6200EE55',
           }]
         },
-        options: this.createChartOptions('Valor da Taxa', 24),
+        options: this.createChartOptions('Valor da Taxa', 24, 'Valor da Taxa', 'Data da Venda'),
       });
     }
   }
@@ -364,7 +364,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             borderWidth: 2,
           }]
         },
-        options: this.createChartOptions('Volume de Vendas', 24),
+        options: this.createChartOptions('Volume de Vendas', 24, 'Quantidade', 'Data da Venda'),
       });
     } else {
       this.chart3 = new Chart('quantidadeVendas', {
@@ -378,7 +378,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             borderWidth: 2,
           }]
         },
-        options: this.createChartOptions('Volume de Vendas', 24),
+        options: this.createChartOptions('Volume de Vendas', 24, 'Quantidade', 'Data da Venda'),
       });
     }
   }
@@ -437,7 +437,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Taxa de Retorno', 24),
+        options: this.createChartOptions('Taxa de Retorno', 24, 'Valor do Retorno obtido em relação ao dia anterior', 'Data da operação'),
       });
     } else {
       const taxaRetornoData = this.graphicTaxaRetorno.slice();
@@ -455,7 +455,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Taxa de Retorno', 24),
+        options: this.createChartOptions('Taxa de Retorno', 24, 'Valor do Retorno obtido em relação ao dia anterior', 'Data da operação'),
       });
     }
   }
@@ -476,7 +476,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Volatilidade (Considerando pk = 1)', 24),
+        options: this.createChartOptions('Volatilidade (Considerando pk = 1)', 24, 'Volatilidade', 'Data da Operação'),
       });
     } else {
       this.chartRisco = new Chart('risco', {
@@ -499,7 +499,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Volatilidade', 24),
+        options: this.createChartOptions('Volatilidade (Considerando pk = 1)', 24, 'Volatilidade', 'Data da Operação'),
       });
       }
   }
@@ -519,7 +519,7 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Value at Risk (NC (95%) = 1,65) 〖-V〗_oi = 1000 ', 24),
+        options: this.createChartOptions('Value at Risk (NC (95%) = 1,65) 〖-V〗_oi = 1000 ', 24, 'Valor', 'Data da Operação'),
       });
     } else {
       this.chartVaR = new Chart('value-at-risk', {
@@ -542,12 +542,12 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
             },
           ]
         },
-        options: this.createChartOptions('Value at Risk', 24),
+        options: this.createChartOptions('Value at Risk', 24, 'Valor', 'Data da Operação'),
       });
       }
   }
 
-  createChartOptions(text: string, fontSize: number) {
+  createChartOptions(text: string, fontSize: number, titulo1?: string, titulo2?: string) {
     const options:any = {
       responsive: true,
       plugins: {
@@ -567,6 +567,28 @@ export class TesourosComponent implements OnInit, AfterViewInit  {
           }
         }
       },
+      scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: titulo2 || 'Valor',
+          font: {
+            size: 16,
+          }
+        }
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: titulo1 || 'Tempo',
+          font: {
+            size: 16,
+          }
+        }
+      }
+      }
     };
     return options;
   }
